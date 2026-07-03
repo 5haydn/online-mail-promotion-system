@@ -1,9 +1,7 @@
 # 在线邮件推广系统
 
 
-##
-Traditional mail promotion system.  not good for my ai marketing.  discard this route.  Choose ai generation.
-
+## Traditional mail promotion system.  not good for my ai marketing.  discard this route.  Choose ai generation.
 
 
 
