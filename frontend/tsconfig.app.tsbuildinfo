@@ -1,0 +1,1 @@
+{"root":["./vite.config.ts","./src/app.vue","./src/main.ts","./src/api/index.ts","./src/components/helloworld.vue","./src/layouts/mainlayout.vue","./src/router/index.ts","./src/stores/auth.ts","./src/views/customers.vue","./src/views/dashboard.vue","./src/views/login.vue","./src/views/notifications.vue"],"errors":true,"version":"6.0.3"}

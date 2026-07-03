@@ -1,0 +1,58 @@
+CREATE DATABASE IF NOT EXISTS mail_promotion DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE mail_promotion;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(64) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  is_admin TINYINT(1) NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS customer_groups (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(128) NOT NULL,
+  description TEXT,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS customers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  group_id INT,
+  email VARCHAR(255) NOT NULL,
+  name VARCHAR(128),
+  company VARCHAR(255),
+  industry VARCHAR(128),
+  product_interest VARCHAR(255),
+  phone VARCHAR(64),
+  notes TEXT,
+  is_valid TINYINT(1) NOT NULL DEFAULT 1,
+  validation_error VARCHAR(512),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_customers_email (email),
+  FOREIGN KEY (group_id) REFERENCES customer_groups(id)
+);
+
+CREATE TABLE IF NOT EXISTS upload_batches (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  filename VARCHAR(255) NOT NULL,
+  status VARCHAR(32) NOT NULL DEFAULT 'completed',
+  total_rows INT NOT NULL DEFAULT 0,
+  valid_rows INT NOT NULL DEFAULT 0,
+  error_rows INT NOT NULL DEFAULT 0,
+  uploaded_by INT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (uploaded_by) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  is_read TINYINT(1) NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_notifications_user (user_id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
