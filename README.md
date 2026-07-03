@@ -1,6 +1,11 @@
 # 在线邮件推广系统
 
+
+##
 Traditional mail promotion system.  not good for my ai marketing.  discard this route.  Choose ai generation.
+
+
+
 
 B/S 架构：Vue 3 前端 + Node.js 后端 + MySQL 数据库。
 
