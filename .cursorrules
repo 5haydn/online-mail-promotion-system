@@ -1,0 +1,40 @@
+# Online Mail Promotion System — Cursor Rules
+
+## Tech Stack
+- Frontend: Vue 3 + Element Plus + Axios (SPA admin dashboard)
+- Backend: Spring Boot 3.x or FastAPI (TBD)
+- Database: MySQL 8.0 (Volcano Cloud RDS)
+- Cache/Queue: Redis (Volcano Cloud)
+- Storage: Volcano Cloud TOS (S3-compatible object storage)
+- AI: Doubao Open Platform API
+- Email: SMTP for sending, IMAP for reply polling
+- Real-time: WebSocket + Browser Notification API
+
+## Architecture Rules
+- B/S architecture deployed on Volcano Cloud ECS behind HTTPS
+- Doubao API keys and email credentials must be encrypted at rest in MySQL, never exposed to frontend
+- Frontend never directly calls Doubao API — all AI requests go through backend
+- File uploads go to TOS first, then backend parses asynchronously
+- Background jobs (IMAP polling, batch sending) run as scheduled tasks separate from the API server
+- WebSocket used for real-time push of new reply notifications and sending progress
+
+## Frontend Rules
+- Use Element Plus components for all UI; maintain consistent Chinese-language admin interface
+- Excel upload must show validation progress and allow downloading error-row files
+- Email editor supports HTML rich text with live preview
+- Sending progress displayed in real-time (success/fail counts with failure reasons)
+- Message center with read/unread filter and browser desktop notifications
+
+## Backend Rules
+- All customer PII (emails, names, phone numbers) handled with encryption at rest
+- SMTP sending must rotate across multiple accounts with configurable rate limits per account
+- IMAP polling must match replies to original sent emails by customer email address
+- AI-generated email content must pass sensitive-word filter before storage/display
+- Full audit log for: login, file upload, batch send, AI generation, config changes
+
+## Security Rules
+- Token-based authentication with role-based access (super admin / operator / read-only viewer)
+- Upload file type whitelist — block executables and scripts
+- TOS object ACLs must be private; generate pre-signed URLs for frontend download
+- API endpoints must validate ownership of resources (no IDOR)
+- Never log API keys, passwords, or customer emails in plaintext
